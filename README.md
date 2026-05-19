@@ -32,27 +32,6 @@
 
 ---
 
-## 📁 프로젝트 구조
-youtube-sentiment-analysis/
-├── data/
-│   ├── yuquiz.csv          # 유퀴즈 댓글 데이터
-│   ├── runningman.csv      # 런닝맨 댓글 데이터
-│   └── nolmyun.csv         # 놀면뭐하니 댓글 데이터
-├── notebooks/
-│   ├── crawling.ipynb      # 데이터 수집
-│   ├── preprocessing.ipynb # 데이터 전처리
-│   ├── eda.ipynb           # 탐색적 데이터 분석
-│   └── sentiment.ipynb     # 감성 분석
-├── src/
-│   └── crawling.py
-├── streamlit/
-│   └── dashboard.py        # 대시보드
-├── .env                    # API 키 (업로드 X)
-├── .gitignore
-└── README.md
-
----
-
 ## 👥 팀 구성
 | 이름 | 역할 | 담당 업무 |
 |------|------|-----------|
