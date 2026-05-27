@@ -52,6 +52,37 @@ def load_data():
 
 df = load_data()
 
+# =========================
+# 파생변수 생성
+# =========================
+
+# 댓글 길이
+df["comment_length"] = df["comment"].astype(str).str.len()
+
+# 좋아요 구간
+df["like_level"] = pd.cut(
+    df["likes"],
+    bins=[-1, 0, 10, 50, 100, 100000],
+    labels=["0", "1~10", "11~50", "51~100", "100+"]
+)
+
+# 감성 점수 구간
+df["score_level"] = pd.cut(
+    df["sentiment_score"],
+    bins=[0, 0.4, 0.7, 1.0],
+    labels=["낮음", "보통", "높음"]
+)
+
+# 인기 댓글 여부
+df["popular_comment"] = df["likes"] >= 50
+
+# 댓글 길이 구간
+df["length_level"] = pd.cut(
+    df["comment_length"],
+    bins=[0, 10, 30, 50, 1000],
+    labels=["짧음", "보통", "김", "매우 김"]
+)
+
 # 사이드바
 st.sidebar.header("필터")
 
@@ -156,6 +187,7 @@ with col_left:
         )
         st.plotly_chart(fig2, use_container_width=True)
 
+
 with col_right:
     st.subheader("🎥 영상별 긍정 비율 TOP 10")
 
@@ -187,6 +219,49 @@ with col_right:
         st.plotly_chart(fig3, use_container_width=True)
     else:
         st.info("긍정 데이터가 없습니다.")
+
+# =========================
+# 댓글 길이 분석
+# =========================
+
+st.divider()
+
+st.subheader("📝 프로그램별 댓글 길이 분포")
+
+fig_length = px.box(
+    filtered,
+    x="program",
+    y="comment_length",
+    color="program",
+    title="프로그램별 댓글 길이 분포"
+)
+
+st.plotly_chart(fig_length, use_container_width=True)
+
+# =========================
+# 좋아요 구간 분석
+# =========================
+
+st.subheader("🔥 좋아요 구간별 댓글 수")
+
+like_count = (
+    filtered["like_level"]
+    .value_counts()
+    .sort_index()
+    .reset_index()
+)
+
+like_count.columns = ["좋아요 구간", "댓글 수"]
+
+fig_like = px.bar(
+    like_count,
+    x="좋아요 구간",
+    y="댓글 수",
+    text="댓글 수",
+    title="좋아요 구간별 댓글 분포"
+)
+
+st.plotly_chart(fig_like, use_container_width=True)
 
 st.divider()
 
